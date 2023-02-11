@@ -1,32 +1,32 @@
 const express = require('express');
 let books = require("./booksdb.js");
-let isValid = require("./auth_users.js").isValid;
+let doesExist = require("./auth_users.js").doesExist;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-const doesExist = (username) => {
-  let usersWithusername = users.filter((user) => {
-    return user.username === username;
-  });
-  if (usersWithusername.length > 0) {
-    return true;
-  } else {
-    return false;
-  }
-};
+// const doesExist = (username) => {
+//   let usersWithusername = users.filter((user) => {
+//     return user.username === username;
+//   });
+//   if (usersWithusername.length > 0) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
 
 
-const authenticatedUser = (username, password) => {
-  let validusers = users.filter((user) => {
-    return (user.username === username && user.password === password)
-  });
-  if (validusers.length > 0) {
-    return true;
-  } else {
-    return false;
-  }
-};
+// const authenticatedUser = (username, password) => {
+//   let validusers = users.filter((user) => {
+//     return (user.username === username && user.password === password)
+//   });
+//   if (validusers.length > 0) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
 
 
 
@@ -45,6 +45,7 @@ public_users.post("/register", (req, res) => {
   }
   return res.status(404).json({ message: "Unable to register user." });
 });
+
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
