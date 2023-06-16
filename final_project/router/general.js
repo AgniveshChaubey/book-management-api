@@ -9,14 +9,13 @@ public_users.post("/register", (req, res) => {
   const password = req.body.password;
 
   const newUser = { username, password };
-  if (users.filter((user) => user.username === username && user.password === password).length === 0) {
+  if (isValid(username)) {
     users.push(newUser);
     res.json({ message: "User registered successfully", user: users });
   } else {
     res.send("User already exists!");
   }
 });
-
 
 // Get the book list available in the shop
 public_users.get("/", function (req, res) {
