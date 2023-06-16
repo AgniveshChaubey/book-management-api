@@ -22,16 +22,16 @@ public_users.get("/isbn/:isbn", function (req, res) {
   if (books.hasOwnProperty(isbn)) {
     res.json(books[isbn]);
   } else {
-    res.status(404).json({ error: 'Book not found' });
+    res.status(404).json({ error: "Book not found" });
   }
 });
 
 // Get book details based on author
 public_users.get("/author/:author", function (req, res) {
   const author = req.params.author;
-  const book = Object.values(books).find(book => book.author === author);
-  if(book) {
-    res.json(book)
+  const book = Object.values(books).filter((book) => book.author === author);
+  if (book) {
+    res.send(book);
   } else {
     res.status(404).json({ error: "Book not found!" });
   }
@@ -39,8 +39,13 @@ public_users.get("/author/:author", function (req, res) {
 
 // Get all books based on title
 public_users.get("/title/:title", function (req, res) {
-  //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+  const title = req.params.title;
+  const book = Object.values(books).filter((book) => book.title === title);
+  if (book) {
+    res.json(book);
+  } else {
+    res.status(404).json({ error: "No books found with the provided title" });
+  }
 });
 
 //  Get book review
