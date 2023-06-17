@@ -63,16 +63,45 @@ function searchBookByISBN(isbn) {
   });
 }
 
-// Get book details based on author
-public_users.get("/author/:author", function (req, res) {
+// // Get book details based on author
+// public_users.get("/author/:author", function (req, res) {
+//   const author = req.params.author;
+//   const book = Object.values(books).filter((book) => book.author === author);
+//   if (book) {
+//     res.send(book);
+//   } else {
+//     res.status(404).json({ error: "Book not found!" });
+//   }
+// });
+
+// // Get book details based on author (using Prmoises)
+public_users.get("/search/author/:author", function (req, res) {
   const author = req.params.author;
-  const book = Object.values(books).filter((book) => book.author === author);
-  if (book) {
-    res.send(book);
-  } else {
-    res.status(404).json({ error: "Book not found!" });
-  }
+
+  searchBooksByAuthor(author)
+    .then((books) => {
+      if (books.length > 0) {
+        res.json(books);
+      } else {
+        res.status(404).json({ error: "No books found by the author" });
+      }
+    })
+    .catch((error) => {
+      console.error("Error searching books by author:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
 });
+
+function searchBooksByAuthor(author) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const matchingBooks = Object.values(books).filter(
+        (book) => book.author === author
+      );
+      resolve(matchingBooks);
+    }, 1000);
+  });
+}
 
 // Get all books based on title
 public_users.get("/title/:title", function (req, res) {
