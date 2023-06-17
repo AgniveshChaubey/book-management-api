@@ -15,11 +15,12 @@ public_users.post("/register", (req, res) => {
   }
 });
 
-public_users.put("/books", (req, res) => {
+public_users.get("/books", (req, res) => {
   res.send(books);
 })
+
 // Get the book list available in the shop
-public_users.get("/", function (req, res) {
+public_users.get("/", async function (req, res) {
   res.json(books);
 });
 
