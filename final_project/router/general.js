@@ -75,7 +75,7 @@ function searchBookByISBN(isbn) {
 // });
 
 // // Get book details based on author (using Prmoises)
-public_users.get("/search/author/:author", function (req, res) {
+public_users.get("/author/:author", function (req, res) {
   const author = req.params.author;
 
   searchBooksByAuthor(author)
@@ -103,16 +103,47 @@ function searchBooksByAuthor(author) {
   });
 }
 
-// Get all books based on title
+// // Get all books based on title
+// public_users.get("/title/:title", function (req, res) {
+//   const title = req.params.title;
+//   const book = Object.values(books).filter((book) => book.title === title);
+//   if (book) {
+//     res.json(book);
+//   } else {
+//     res.status(404).json({ error: "No books found with the provided title" });
+//   }
+// });
+
+// Get all books based on title (using Promsies)
 public_users.get("/title/:title", function (req, res) {
   const title = req.params.title;
-  const book = Object.values(books).filter((book) => book.title === title);
-  if (book) {
-    res.json(book);
-  } else {
-    res.status(404).json({ error: "No books found with the provided title" });
-  }
+
+  searchBooksByTitle(title)
+    .then((books) => {
+      if (books.length > 0) {
+        res.json(books);
+      } else {
+        res
+          .status(404)
+          .json({ error: "No books found with the provided title" });
+      }
+    })
+    .catch((error) => {
+      console.error("Error searching books by title:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
 });
+
+function searchBooksByTitle(title) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const matchingBooks = Object.values(books).filter(
+        (book) => book.title === title
+      );
+      resolve(matchingBooks);
+    }, 1000);
+  });
+}
 
 //  Get book review
 public_users.get("/review/:isbn", function (req, res) {
