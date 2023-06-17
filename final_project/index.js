@@ -18,17 +18,17 @@ app.use(
 );
 
 app.use("/customer/auth/*", function auth(req, res, next) {
-  //Write the authenication mechanism here
   const token = req.session.token;
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized!" });
   }
   try {
-    const decoded = jwt.verify(token, "your_secret_key");
-    req.user.decoded;
+    const payload = jwt.verify(token, `${req.body.username}`);
+    req.user = payload.username;
+    req.passwd = payload.password;
     next();
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
   }
 });
 
